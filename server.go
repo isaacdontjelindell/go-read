@@ -1,20 +1,44 @@
 package main
 
 import (
-    "fmt"
-
-    "bufio"
-
     "os"
+    "net"
+    "bufio"
 )
 
 func main() {
-    
-    fmt.Print("Enter a title to search for: ")
-    bio := bufio.NewReader(os.Stdin)
-    line, _, _ := bio.ReadLine()
+    //s := string(line[:])
+    println("Starting...")
 
-    s := string(line[:])
+    listener, err := net.Listen("tcp", "0.0.0.0:1337")
 
-    fmt.Println(s)
+    if err != nil {
+        println("Error starting listener", err.Error())
+        os.Exit(1)
+    }
+
+
+    for {
+        conn, err := listener.Accept()
+        if err != nil {
+            println("Error accepting connection", err.Error())
+            return
+        }
+
+        go printData(conn)
+    }
+
+}
+
+func printData(conn net.Conn) {
+    b := bufio.NewReader(conn)
+
+    for {
+        line, err := b.ReadBytes('\n')
+        if err != nil {
+            break
+        }
+        print(string(line[:]))
+        conn.Write(line)
+    }
 }

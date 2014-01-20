@@ -40,7 +40,6 @@ func acceptData(conn net.Conn, c chan []byte) {
 		}
 		print(string(line[:]))
         c <- line
-		//conn.Write(line)
 	}
 }
 

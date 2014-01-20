@@ -37,6 +37,6 @@ func printData(conn net.Conn) {
 			break
 		}
 		print(string(line[:]))
-		conn.Write(line)
+		//conn.Write(line)
 	}
 }

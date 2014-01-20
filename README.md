@@ -1,4 +1,4 @@
 go-read
 =======
 
-Goodreads CLI client in Go
+Simple chat in Go

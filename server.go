@@ -1,44 +1,42 @@
 package main
 
 import (
-    "os"
-    "net"
-    "bufio"
+	"bufio"
+	"net"
+	"os"
 )
 
 func main() {
-    //s := string(line[:])
-    println("Starting...")
+	println("Starting...")
 
-    listener, err := net.Listen("tcp", "0.0.0.0:1337")
+	listener, err := net.Listen("tcp", "0.0.0.0:1337")
 
-    if err != nil {
-        println("Error starting listener", err.Error())
-        os.Exit(1)
-    }
+	if err != nil {
+		println("Error starting listener", err.Error())
+		os.Exit(1)
+	}
 
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			println("Error accepting connection", err.Error())
+			return
+		}
 
-    for {
-        conn, err := listener.Accept()
-        if err != nil {
-            println("Error accepting connection", err.Error())
-            return
-        }
-
-        go printData(conn)
-    }
+		go printData(conn)
+	}
 
 }
 
 func printData(conn net.Conn) {
-    b := bufio.NewReader(conn)
+	b := bufio.NewReader(conn)
 
-    for {
-        line, err := b.ReadBytes('\n')
-        if err != nil {
-            break
-        }
-        print(string(line[:]))
-        conn.Write(line)
-    }
+	for {
+		line, err := b.ReadBytes('\n')
+		if err != nil {
+			break
+		}
+		print(string(line[:]))
+		conn.Write(line)
+	}
 }

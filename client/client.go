@@ -16,6 +16,9 @@ func main() {
 		os.Exit(1)
 	}
 
+    // start listening for messages from the server
+    go listener(conn)
+
 	for {
 		b := bufio.NewReader(os.Stdin)
 
@@ -24,8 +27,19 @@ func main() {
 			if err != nil {
 				break
 			}
-			//print(string(line[:]))
 			conn.Write(line)
 		}
 	}
+}
+
+func listener(conn net.Conn) {
+    b := bufio.NewReader(conn)
+
+    for {
+        line, err := b.ReadBytes('\n')
+        if err != nil {
+            break
+        }
+        print(string(line[:]))
+    }
 }
